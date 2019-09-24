@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace WiFiValidatorTest
 {
-    class Test
+    class Program
     {
         static void Main(string[] args)
         {
