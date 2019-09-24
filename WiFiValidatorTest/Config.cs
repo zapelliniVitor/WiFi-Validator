@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WiFiValidatorTest
 {
-    class DAL
+    class Config
     {
         public bool VerifyIfTxtExists()
         {
@@ -31,20 +31,26 @@ namespace WiFiValidatorTest
         public string ValidateWiFi()
         {
             //string s = System.IO.File.ReadAllText(@"C:\Users\User\Desktop\WifiIP\WiFiIP.txt");
-            string s = System.IO.File.ReadAllText(Adress());
+            string[] s = System.IO.File.ReadAllLines(Adress());
+            int count = 0;
 
-            if (s == new ReadWifi().GetWifiIp())
+            foreach (string ip in s)
             {
-                return "IP compativel. \r\n ACESSO PERMITIDO!";
+                if (s[count] == new ReadWifi().GetWifiIp())
+                {
+                    return "IP compativel. \r\n" + "ACESSO PERMITIDO!";
+                }
+                count++;
             }
+            
 
-            return "IP não compativel. \r\n ACESSO NEGADO!";
+            return "IP não compativel. \r\n" + "ACESSO NEGADO!";
         }
 
-        internal string Adress()
+        public string Adress()
         {
             return @"C:\Users\moc\Source\Repos\WiFi-Validator\WiFiValidatorTest\bin\Debug\WiFiIP.txt";
         }
     }
-    }
+    
 }

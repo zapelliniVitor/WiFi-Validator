@@ -14,9 +14,8 @@ namespace WiFiValidatorTest
                 new Config().StoreWifiIP();
             }
 
-
             //if (new FileInfo(@"C:\Users\User\Desktop\WifiIP\WiFiIP.txt").Length == 0)
-            if (new FileInfo(@"C:\Users\moc\Source\Repos\WiFi-Validator\WiFiValidatorTest\bin\Debug\WiFiIP.txt").Length == 0)
+            if (new FileInfo(new Config().Adress()).Length == 0)
             {
                 Console.WriteLine(new Config().StoreWifiIP());
             }
