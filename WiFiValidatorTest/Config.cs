@@ -9,28 +9,26 @@ namespace WiFiValidatorTest
 {
     class Config
     {
-        public bool VerifyIfTxtExists()
+        public bool VerifyDataBase()
         {
-            if (System.IO.File.Exists(Adress()))
+            if (!new DAL().VerifyTableInDataBase())
             {
-                return true;
+                return false;
             }
-            return false;
+
+            return true;
         }
 
-        public string StoreWifiIP()
+        public void StoreWifiIP()
         {
             //System.IO.File.WriteAllText(@"C:\Users\User\Desktop\WifiIP\WiFiIP.txt", new ReadWifi().GetWifiIp());
             FileStream fs1 = new FileStream(Adress(), FileMode.OpenOrCreate, FileAccess.ReadWrite);
             StreamWriter w = new StreamWriter(fs1);
             w.Write(GetWifiIp());
             w.Close();
-
-
-            return "IP gravado com sucesso. \r\n";
         }
 
-        public string ValidateWiFi()
+        public bool ValidateWiFi()
         {
             //string s = System.IO.File.ReadAllText(@"C:\Users\User\Desktop\WifiIP\WiFiIP.txt");
             string[] s = System.IO.File.ReadAllLines(Adress());
@@ -40,13 +38,12 @@ namespace WiFiValidatorTest
             {
                 if (s[count] == GetWifiIp())
                 {
-                    return "IP compativel. \r\n" + "ACESSO PERMITIDO!";
+                    return true;
                 }
                 count++;
             }
-            
 
-            return "IP não compativel. \r\n" + "ACESSO NEGADO!";
+            return false;
         }
 
         public string Adress()

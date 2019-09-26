@@ -7,20 +7,17 @@ namespace WiFiValidatorTest
 {
     class Program
     {
-        static void Main(string[] args)
+       public bool IpValidator()
         {
-            if (!new Config().VerifyIfTxtExists())
-            {
-                new Config().StoreWifiIP();
-            }
 
             //if (new FileInfo(@"C:\Users\User\Desktop\WifiIP\WiFiIP.txt").Length == 0)
             if (new FileInfo(new Config().Adress()).Length == 0)
             {
-                Console.WriteLine(new Config().StoreWifiIP());
+                new Config().StoreWifiIP();
+                return false;
             }
 
-            Console.WriteLine(new Config().ValidateWiFi());
+            return true;
         }
     }
 }
