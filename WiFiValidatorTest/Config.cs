@@ -19,13 +19,16 @@ namespace WiFiValidatorTest
             return true;
         }
 
-        public void StoreWifiIP()
+        public bool StoreWifiIP()
         {
             //System.IO.File.WriteAllText(@"C:\Users\User\Desktop\WifiIP\WiFiIP.txt", new ReadWifi().GetWifiIp());
-            FileStream fs1 = new FileStream(Adress(), FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            StreamWriter w = new StreamWriter(fs1);
-            w.Write(GetWifiIp());
-            w.Close();
+            //FileStream fs1 = new FileStream(Adress(), FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            //StreamWriter w = new StreamWriter(fs1);
+            //w.Write(GetWifiIp());
+            //w.Close();
+
+            return new DAL().InsertIP();
+
         }
 
         public bool ValidateWiFi()
@@ -48,7 +51,7 @@ namespace WiFiValidatorTest
 
         public string Adress()
         {
-            return @"C:\Users\moc\Source\Repos\WiFi-Validator\WiFiValidatorTest\bin\Debug\WiFiIP.txt";
+            return @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\moc\Documents\WiFiDB.mdf;Integrated Security=True;Connect Timeout=30";
         }
 
         internal string GetWifiIp()

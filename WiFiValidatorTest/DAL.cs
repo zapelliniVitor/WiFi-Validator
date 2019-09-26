@@ -9,7 +9,7 @@ namespace WiFiValidatorTest
     {
         public bool VerifyTableInDataBase()
         {
-            SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\User\Documents\WiFiValidator.mdf;Integrated Security=True;Connect Timeout=30");
+            SqlConnection connection = new SqlConnection(new Config().Adress());
             SqlCommand command = new SqlCommand(connection.ToString());
             command.CommandText = @"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES;";
 
@@ -35,36 +35,68 @@ namespace WiFiValidatorTest
 
             return true;
         }
-
         public bool InsertIP()
         {
-            SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\User\Documents\WiFiValidator.mdf;Integrated Security=True;Connect Timeout=30");
+            string ex = null;
+            SqlConnection connection = new SqlConnection(new Config().Adress());
             SqlCommand command = new SqlCommand(connection.ToString());
-            command.CommandText = @"INSERT";
+            command.CommandText = @"INSERT INTO IPS(IP_NUMBER) VALUES (@VALUE)";
+            command.Parameters.AddWithValue("@VALUE", new Config().GetWifiIp());
 
             command.Connection = connection;
             try
             {
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                if (!reader.Read())
-                {
-                    return false;
-                }
+                command.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception exc)
             {
-
-                throw new Exception(ex.ToString());
+                if (exc.Message.Contains("UNIQUE"))
+                {
+                    ex = exc.ToString();
+                }
             }
             finally
             {
                 connection.Dispose();
             }
 
+            if (!string.IsNullOrWhiteSpace(ex))
+            {
+                return false;
+            }
             return true;
+            
         }
+        public List<string> GetIPs()
+        {
+            string error = null;
+            SqlConnection connection = new SqlConnection(new Config().Adress());
+            SqlCommand command = new SqlCommand(connection.ToString());
+            command.CommandText = @"SELECT * FROM IPS";
 
+            command.Connection = connection;
+            List<string> ips = new List<string>();
+            try
+            {
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    string ip = (string)reader["IP_NUMBER"];
+                    ips.Add(ip);
+                }
+            }
+            catch (Exception ex)
+            {
+                error = ex.ToString();
+            }
+            finally
+            {
+                connection.Dispose();
+            }
 
+            return ips;
+        }
     }
 }

@@ -5,19 +5,26 @@ using System.Net.Sockets;
 
 namespace WiFiValidatorTest
 {
-    class Program
+    public class Program
     {
        public bool IpValidator()
         {
-
             //if (new FileInfo(@"C:\Users\User\Desktop\WifiIP\WiFiIP.txt").Length == 0)
-            if (new FileInfo(new Config().Adress()).Length == 0)
+            //if (new FileInfo(new Config().Adress()).Length == 0)
+            //{
+            //    new Config().StoreWifiIP();
+            //    return false;
+            //}
+
+            for (int i = 0; i < new DAL().GetIPs().Count; i++)
             {
-                new Config().StoreWifiIP();
-                return false;
+                if (new DAL().GetIPs()[i] == new Config().GetWifiIp())
+                {
+                    return true;
+                }
             }
 
-            return true;
+            return false;
         }
     }
 }
